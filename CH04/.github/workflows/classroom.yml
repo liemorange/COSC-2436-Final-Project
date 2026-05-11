@@ -1,0 +1,50 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python 3.13
+      run: |
+        python3 --version
+
+    - name: syntaxandcompilationcheck
+      id: syntaxandcompilationcheck
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Syntax and Compilation Check
+        command: python3 -c "import py_compile; py_compile.compile('main.py', doraise=True)"
+        timeout: 10
+        max-score: 10
+
+    - name: functionaltestquicksortoutput
+      id: functionaltestquicksortoutput
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Functional Test - Quicksort Output
+        command: python3 main.py
+        timeout: 10
+        max-score: 90
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      if: always()
+      env:
+        SYNTAXANDCOMPILATIONCHECK_RESULTS: "${{ steps.syntaxandcompilationcheck.outputs.result }}"
+        FUNCTIONALTESTQUICKSORTOUTPUT_RESULTS: "${{ steps.functionaltestquicksortoutput.outputs.result }}"
+      with:
+        runners: syntaxandcompilationcheck,functionaltestquicksortoutput

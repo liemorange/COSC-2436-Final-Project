@@ -1,0 +1,56 @@
+name: Autograding Tests
+
+'on':
+  push:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: compilationandsyntaxcheck
+      id: compilationandsyntaxcheck
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Compilation and Syntax Check"
+        command: python3 -c "import py_compile; py_compile.compile('main.py', doraise=True)"
+        timeout: 5
+        max-score: 10
+
+    - name: functionaltestsingleboxfits
+      id: functionaltestsingleboxfits
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Functional Test - Single Box Fits"
+        command: printf '5\n5\n5\na\n1\n1\n1\ndone\n' | python3 main.py
+        timeout: 10
+        max-score: 45
+
+    - name: functionaltestmultipleboxesfit
+      id: functionaltestmultipleboxesfit
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Functional Test - Multiple Boxes Fit"
+        command: printf '10\n10\n10\nbox1\n3\n3\n3\nbox2\n4\n4\n4\nbox3\n5\n5\n5\ndone\n' | python3 main.py
+        timeout: 10
+        max-score: 45
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        COMPILATIONANDSYNTAXCHECK_RESULTS: "${{ steps.compilationandsyntaxcheck.outputs.result }}"
+        FUNCTIONALTESTSINGLEBOXFITS_RESULTS: "${{ steps.functionaltestsingleboxfits.outputs.result }}"
+        FUNCTIONALTESTMULTIPLEBOXESFIT_RESULTS: "${{ steps.functionaltestmultipleboxesfit.outputs.result }}"
+      with:
+        runners: compilationandsyntaxcheck,functionaltestsingleboxfits,functionaltestmultipleboxesfit

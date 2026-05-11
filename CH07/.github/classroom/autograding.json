@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Test search for existing element",
+      "run": "python solution.py",
+      "points": 25,
+      "input": "",
+      "output": "[1, 3, 5, 7, 8, 9, 10]\nTrue\nFalse",
+      "setup": "pip install pytest",
+      "timeout": 10,
+      "comparison": "included"
+    },
+    {
+      "name": "Test search for non-existing element",
+      "run": "python solution.py",
+      "points": 25,
+      "input": "",
+      "output": "[1, 3, 5, 7, 8, 9, 10]\nTrue\nFalse",
+      "setup": "pip install pytest",
+      "timeout": 10,
+      "comparison": "included"
+    },
+    {
+      "name": "Test insertion and inorder traversal with different data",
+      "run": "python -c 'from solution import BinaryTree; tree = BinaryTree(); [tree.insert(n) for n in [15, 10, 20, 8, 12, 17, 25]]; print(tree.inorder_traversal())'",
+      "points": 25,
+      "input": "",
+      "output": "[8, 10, 12, 15, 17, 20, 25]",
+      "setup": "pip install pytest",
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "name": "Test search in empty tree",
+      "run": "python -c 'from solution import BinaryTree; tree = BinaryTree(); print(tree.search(5))'",
+      "points": 25,
+      "input": "",
+      "output": "False",
+      "setup": "pip install pytest",
+      "timeout": 10,
+      "comparison": "exact"
+    }
+  ]
+}

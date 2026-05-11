@@ -1,0 +1,36 @@
+name: Autograding Tests
+
+'on':
+  push:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: compilationandsyntaxcheck
+      id: compilationandsyntaxcheck
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Compilation and Syntax Check"
+        command: python3 -c "import py_compile; py_compile.compile('main.py', doraise=True)"
+        timeout: 5
+        max-score: 100
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        COMPILATIONANDSYNTAXCHECK_RESULTS: "${{ steps.compilationandsyntaxcheck.outputs.result }}"
+      with:
+        runners: compilationandsyntaxcheck

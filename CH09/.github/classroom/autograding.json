@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Compilation and Syntax Check",
+      "run": "python3 -c \"import py_compile; py_compile.compile('main.py', doraise=True)\"",
+      "points": 100,
+      "input": "",
+      "output": "",
+      "setup": "",
+      "timeout": 5,
+      "comparison": "exit_code"
+    }
+  ]
+}

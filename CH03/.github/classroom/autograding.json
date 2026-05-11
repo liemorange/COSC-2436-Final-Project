@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "Pytest Tests Pass",
+      "setup": "pip install pytest",
+      "run": "pytest tests/ -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 60,
+      "points": 70
+    },
+    {
+      "name": "Recursion Module Exists",
+      "setup": "",
+      "run": "python -c \"import recursion; print('Module exists')\"",
+      "input": "",
+      "output": "Module exists",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 15
+    },
+    {
+      "name": "Factorial Works",
+      "setup": "",
+      "run": "python -c \"from recursion import fact; assert fact(5) == 120; print('Test passed')\"",
+      "input": "",
+      "output": "Test passed",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 15
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+name: Autograding Tests
+'on':
+  push:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Header row prints capacity columns
+      id: headerrowprintscapacitycolumns
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Header row prints capacity columns
+        setup-command: ''
+        command: python3 main.py 2>/dev/null | grep -Fq '1           2           3           4           5           6'
+        timeout: 10
+        max-score: 25
+
+    - name: Guitar row uses lightest item across all capacities
+      id: guitarrowusesligh
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Guitar row uses lightest item across all capacities
+        setup-command: ''
+        command: python3 main.py 2>/dev/null | grep -Fiq 'GUITAR          $1500(G)    $1500(G)    $1500(G)    $1500(G)    $1500(G)    $1500(G)'
+        timeout: 10
+        max-score: 25
+
+    - name: Laptop row picks GL combination at capacity 4
+      id: laptoprowpicksglc
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Laptop row picks GL combination at capacity 4
+        setup-command: ''
+        command: python3 main.py 2>/dev/null | grep -Fiq '$3500(GL)'
+        timeout: 10
+        max-score: 25
+
+    - name: Optimal value at full capacity is GOLD-LAPTOP-iPHONE-GUITAR
+      id: optimalvalueatful
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Optimal value at full capacity is GOLD-LAPTOP-iPHONE-GUITAR
+        setup-command: ''
+        command: python3 main.py 2>/dev/null | grep -Fiq '$35500(GLiG)'
+        timeout: 10
+        max-score: 25
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        HEADERROWPRINTSCAPACITYCOLUMNS_RESULTS: "${{steps.headerrowprintscapacitycolumns.outputs.result}}"
+        GUITARROWUSESLIGH_RESULTS: "${{steps.guitarrowusesligh.outputs.result}}"
+        LAPTOPROWPICKSGLC_RESULTS: "${{steps.laptoprowpicksglc.outputs.result}}"
+        OPTIMALVALUEATFUL_RESULTS: "${{steps.optimalvalueatful.outputs.result}}"
+      with:
+        runners: headerrowprintscapacitycolumns,guitarrowusesligh,laptoprowpicksglc,optimalvalueatful

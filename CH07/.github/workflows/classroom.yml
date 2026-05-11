@@ -1,0 +1,68 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main, solution ]
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install test dependencies
+      run: pip install pytest
+
+    - name: testsearchforexistingelement
+      id: testsearchforexistingelement
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test search for existing element"
+        command: python solution.py
+        timeout: 10
+        max-score: 25
+
+    - name: testsearchfornonexistingelement
+      id: testsearchfornonexistingelement
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test search for non-existing element"
+        command: python solution.py
+        timeout: 10
+        max-score: 25
+
+    - name: testinsertionandinordertraversalwithdifferentdata
+      id: testinsertionandinordertraversalwithdifferentdata
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test insertion and inorder traversal with different data"
+        command: python -c 'from solution import BinaryTree; tree = BinaryTree(); [tree.insert(n) for n in [15, 10, 20, 8, 12, 17, 25]]; print(tree.inorder_traversal())'
+        timeout: 10
+        max-score: 25
+
+    - name: testsearchinemptytree
+      id: testsearchinemptytree
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test search in empty tree"
+        command: python -c 'from solution import BinaryTree; tree = BinaryTree(); print(tree.search(5))'
+        timeout: 10
+        max-score: 25
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TESTSEARCHFOREXISTINGELEMENT_RESULTS: "${{ steps.testsearchforexistingelement.outputs.result }}"
+        TESTSEARCHFORNONEXISTINGELEMENT_RESULTS: "${{ steps.testsearchfornonexistingelement.outputs.result }}"
+        TESTINSERTIONANDINORDERTRAVERSALWITHDIFFERENTDATA_RESULTS: "${{ steps.testinsertionandinordertraversalwithdifferentdata.outputs.result }}"
+        TESTSEARCHINEMPTYTREE_RESULTS: "${{ steps.testsearchinemptytree.outputs.result }}"
+      with:
+        runners: testsearchforexistingelement,testsearchfornonexistingelement,testinsertionandinordertraversalwithdifferentdata,testsearchinemptytree

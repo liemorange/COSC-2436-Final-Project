@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "name": "Sort Tests Pass",
+      "setup": "pip install pytest",
+      "run": "pytest tests/test_sort.py -v",
+      "points": 40,
+      "timeout": 60
+    },
+    {
+      "name": "LinkedList Tests Pass",
+      "setup": "pip install pytest",
+      "run": "pytest tests/test_linked_list.py -v",
+      "points": 30,
+      "timeout": 60
+    },
+    {
+      "name": "Selection Sort Functions Exist",
+      "setup": "",
+      "run": "python -c \"from sort import selection_sort, find_smallest_index, python_builtin_sort; print('All functions exist')\"",
+      "points": 10,
+      "timeout": 10
+    },
+    {
+      "name": "LinkedList Classes Exist",
+      "setup": "",
+      "run": "python -c \"from linked_list import Node, LinkedList; print('Classes exist')\"",
+      "points": 10,
+      "timeout": 10
+    },
+    {
+      "name": "Selection Sort Works",
+      "setup": "",
+      "run": "python -c \"from sort import selection_sort; result = selection_sort([3,1,2], key=lambda x: x); assert result == [1,2,3], f'Expected [1,2,3] got {result}'; print('Test passed')\"",
+      "points": 10,
+      "timeout": 10
+    }
+  ]
+}

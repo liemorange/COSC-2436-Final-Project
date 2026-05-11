@@ -1,0 +1,80 @@
+name: Autograding Tests
+'on':
+  push:
+  workflow_dispatch:
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install matplotlib numpy pandas scikit-learn
+
+    - name: Stash expected test outputs
+      run: |
+        echo 'QmFrZXJ5IERhdGE6CiAgICB3ZWF0aGVyICB3ZWVrZW5kX2hvbGlkYXkgIGdhbWVfb24gIGxvYXZlcwowICAgICAgICAgMyAgICAgICAgICAgICAgICAwICAgICAgICAwICAgICAgNDIKMSAgICAgICAgIDUgICAgICAgICAgICAgICAgMSAgICAgICAgMSAgICAgIDk1CjIgICAgICAgICAyICAgICAgICAgICAgICAgIDAgICAgICAgIDAgICAgICAzMAozICAgICAgICAgNCAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgNzIKNCAgICAgICAgIDEgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDM4CjUgICAgICAgICA1ICAgICAgICAgICAgICAgIDAgICAgICAgIDAgICAgICA1NQo2ICAgICAgICAgMyAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgNzgKNyAgICAgICAgIDQgICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgIDUwCjggICAgICAgICAyICAgICAgICAgICAgICAgIDEgICAgICAgIDAgICAgICA1OAo5ICAgICAgICAgNSAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgODUKMTAgICAgICAgIDEgICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgIDIyCjExICAgICAgICAzICAgICAgICAgICAgICAgIDAgICAgICAgIDEgICAgICA1MgoxMiAgICAgICAgNCAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgODgKMTMgICAgICAgIDIgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDQ0CjE0ICAgICAgICA1ICAgICAgICAgICAgICAgIDAgICAgICAgIDEgICAgICA3MAoxNSAgICAgICAgMyAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgNjUKMTYgICAgICAgIDQgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDYyCjE3ICAgICAgICAxICAgICAgICAgICAgICAgIDEgICAgICAgIDAgICAgICA0OAoxOCAgICAgICAgMiAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgNzAKMTkgICAgICAgIDQgICAgICAgICAgICAgICAgMSAgICAgICAgMCAgICAgIDc1CgpGZWF0dXJlcyBzaGFwZTogKDIwLCAzKQpUYXJnZXQgc2hhcGU6ICgyMCwpCgpLTk4gbW9kZWwgdHJhaW5lZCB3aXRoIGs9NAoKVG9kYXkncyBjb25kaXRpb25zOiBXZWF0aGVyPTQsIFdlZWtlbmQvSG9saWRheT0xLCBHYW1lPTAKUHJlZGljdGVkIGxvYXZlcyB0byBiYWtlOiA3MC41Cg==' | base64 -d > /tmp/expected_loadsbakerydatawithcorrectdimensions.txt
+        echo 'QmFrZXJ5IERhdGE6CiAgICB3ZWF0aGVyICB3ZWVrZW5kX2hvbGlkYXkgIGdhbWVfb24gIGxvYXZlcwowICAgICAgICAgMyAgICAgICAgICAgICAgICAwICAgICAgICAwICAgICAgNDIKMSAgICAgICAgIDUgICAgICAgICAgICAgICAgMSAgICAgICAgMSAgICAgIDk1CjIgICAgICAgICAyICAgICAgICAgICAgICAgIDAgICAgICAgIDAgICAgICAzMAozICAgICAgICAgNCAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgNzIKNCAgICAgICAgIDEgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDM4CjUgICAgICAgICA1ICAgICAgICAgICAgICAgIDAgICAgICAgIDAgICAgICA1NQo2ICAgICAgICAgMyAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgNzgKNyAgICAgICAgIDQgICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgIDUwCjggICAgICAgICAyICAgICAgICAgICAgICAgIDEgICAgICAgIDAgICAgICA1OAo5ICAgICAgICAgNSAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgODUKMTAgICAgICAgIDEgICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgIDIyCjExICAgICAgICAzICAgICAgICAgICAgICAgIDAgICAgICAgIDEgICAgICA1MgoxMiAgICAgICAgNCAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgODgKMTMgICAgICAgIDIgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDQ0CjE0ICAgICAgICA1ICAgICAgICAgICAgICAgIDAgICAgICAgIDEgICAgICA3MAoxNSAgICAgICAgMyAgICAgICAgICAgICAgICAxICAgICAgICAwICAgICAgNjUKMTYgICAgICAgIDQgICAgICAgICAgICAgICAgMCAgICAgICAgMSAgICAgIDYyCjE3ICAgICAgICAxICAgICAgICAgICAgICAgIDEgICAgICAgIDAgICAgICA0OAoxOCAgICAgICAgMiAgICAgICAgICAgICAgICAxICAgICAgICAxICAgICAgNzAKMTkgICAgICAgIDQgICAgICAgICAgICAgICAgMSAgICAgICAgMCAgICAgIDc1CgpGZWF0dXJlcyBzaGFwZTogKDIwLCAzKQpUYXJnZXQgc2hhcGU6ICgyMCwpCgpLTk4gbW9kZWwgdHJhaW5lZCB3aXRoIGs9NAoKVG9kYXkncyBjb25kaXRpb25zOiBXZWF0aGVyPTQsIFdlZWtlbmQvSG9saWRheT0xLCBHYW1lPTAKUHJlZGljdGVkIGxvYXZlcyB0byBiYWtlOiA3MC41Cg==' | base64 -d > /tmp/expected_displaystodayconditionscorrectly.txt
+
+    - name: programexecuteswithouterrors
+      id: programexecuteswithouterrors
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Program executes without errors"
+        command: |
+          python3 main.py
+        timeout: 10
+        max-score: 25
+
+    - name: loadsbakerydatawithcorrectdimensions
+      id: loadsbakerydatawithcorrectdimensions
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Loads bakery data with correct dimensions"
+        command: |
+          python3 main.py 2>/dev/null | grep -Fqf /tmp/expected_loadsbakerydatawithcorrectdimensions.txt
+        timeout: 10
+        max-score: 20
+
+    - name: displaystodayconditionscorrectly
+      id: displaystodayconditionscorrectly
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Displays today conditions correctly"
+        command: |
+          python3 main.py 2>/dev/null | grep -Fqf /tmp/expected_displaystodayconditionscorrectly.txt
+        timeout: 10
+        max-score: 20
+
+    - name: predictsreasonableloavesusingknnregression
+      id: predictsreasonableloavesusingknnregression
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Predicts reasonable loaves using KNN regression"
+        command: |
+          python3 main.py 2>/dev/null | grep -Eq 'Predicted loaves to bake: 7'
+        timeout: 10
+        max-score: 35
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        PROGRAMEXECUTESWITHOUTERRORS_RESULTS: "${{ steps.programexecuteswithouterrors.outputs.result }}"
+        LOADSBAKERYDATAWITHCORRECTDIMENSIONS_RESULTS: "${{ steps.loadsbakerydatawithcorrectdimensions.outputs.result }}"
+        DISPLAYSTODAYCONDITIONSCORRECTLY_RESULTS: "${{ steps.displaystodayconditionscorrectly.outputs.result }}"
+        PREDICTSREASONABLELOAVESUSINGKNNREGRESSION_RESULTS: "${{ steps.predictsreasonableloavesusingknnregression.outputs.result }}"
+      with:
+        runners: programexecuteswithouterrors,loadsbakerydatawithcorrectdimensions,displaystodayconditionscorrectly,predictsreasonableloavesusingknnregression

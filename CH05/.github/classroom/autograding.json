@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "run": "python3 -c \"import py_compile; py_compile.compile('main.py', doraise=True)\"",
+      "name": "Compilation and Syntax Check",
+      "input": "",
+      "setup": "",
+      "output": "",
+      "points": 10,
+      "timeout": 5
+    },
+    {
+      "run": "python3 main.py",
+      "name": "Functional Test",
+      "input": "",
+      "setup": "",
+      "output": "100\n200\n300\nNone",
+      "points": 90,
+      "timeout": 5
+    }
+  ]
+}

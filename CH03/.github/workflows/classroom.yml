@@ -1,0 +1,60 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  actions: read
+
+jobs:
+  run-autograding-tests:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Pytest Tests Pass
+      id: pytesttests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Pytest Tests Pass
+        setup-command: pip install pytest
+        command: pytest tests/ -v
+        timeout: 10
+        max-score: 70
+
+    - name: Recursion Module Exists
+      id: recursionmodule
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Recursion Module Exists
+        command: python -c "import recursion; print('Module exists')"
+        timeout: 10
+        max-score: 15
+
+    - name: Factorial Works
+      id: factorialworks
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Factorial Works
+        command: python -c "from recursion import fact; assert fact(5) == 120; print('Works')"
+        timeout: 10
+        max-score: 15
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        PYTESTTESTS_RESULTS: "${{steps.pytesttests.outputs.result}}"
+        RECURSIONMODULE_RESULTS: "${{steps.recursionmodule.outputs.result}}"
+        FACTORIALWORKS_RESULTS: "${{steps.factorialworks.outputs.result}}"
+      with:
+        runners: pytesttests,recursionmodule,factorialworks

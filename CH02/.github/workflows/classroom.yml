@@ -1,0 +1,60 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  actions: read
+
+jobs:
+  run-autograding-tests:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Pytest Tests Pass
+      id: pytesttests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Pytest Tests Pass
+        setup-command: pip install pytest
+        command: pytest tests/ -v
+        timeout: 60
+        max-score: 70
+
+    - name: Sort Module Exists
+      id: sortmodule
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Sort Module Exists
+        command: python -c "import sort; print('Module exists')"
+        timeout: 10
+        max-score: 15
+
+    - name: Selection Sort Works
+      id: selectionsort
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Selection Sort Works
+        command: python -c "from sort import selection_sort; result = selection_sort([3,1,2], key=lambda x:x); assert result == [1,2,3]; print('Works')"
+        timeout: 10
+        max-score: 15
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        PYTESTTESTS_RESULTS: "${{steps.pytesttests.outputs.result}}"
+        SORTMODULE_RESULTS: "${{steps.sortmodule.outputs.result}}"
+        SELECTIONSORT_RESULTS: "${{steps.selectionsort.outputs.result}}"
+      with:
+        runners: pytesttests,sortmodule,selectionsort

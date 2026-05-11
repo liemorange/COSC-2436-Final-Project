@@ -1,0 +1,102 @@
+name: Autograding Tests
+'on':
+  push:
+  workflow_dispatch:
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Stash expected test outputs
+      run: |
+        echo 'QmluYXJ5IFNlYXJjaCB2cyBMaW5lYXIgU2VhcmNoIFRpbWUgQ29tcGFyaXNvbg==' | base64 -d > /tmp/expected_programexecuteswithouterrors.txt
+        echo 'QmluYXJ5IHNlYXJjaCByZXN1bHQ6' | base64 -d > /tmp/expected_demonstratesbinarysearchimplementation.txt
+        echo 'TGluZWFyIHNlYXJjaCByZXN1bHQ6' | base64 -d > /tmp/expected_demonstrateslinearsearchimplementation.txt
+        echo 'QmluYXJ5IHNlYXJjaCB0aW1lOg==' | base64 -d > /tmp/expected_showstimingcomparisonbetweenalgorithms.txt
+        echo 'TWF4aW11bSBzdGVwcyBmb3IgYmluYXJ5IHNlYXJjaCBpbiAxMjggaXRlbXM6' | base64 -d > /tmp/expected_answerslabchallengeaboutmaximumsteps.txt
+        echo 'NyBzdGVwcyBtYXhpbXVt' | base64 -d > /tmp/expected_calculatescorrectmaximumstepsusinglog2.txt
+
+    - name: programexecuteswithouterrors
+      id: programexecuteswithouterrors
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Program executes without errors"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_programexecuteswithouterrors.txt
+        timeout: 10
+        max-score: 25
+
+    - name: demonstratesbinarysearchimplementation
+      id: demonstratesbinarysearchimplementation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Demonstrates binary search implementation"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_demonstratesbinarysearchimplementation.txt
+        timeout: 10
+        max-score: 20
+
+    - name: demonstrateslinearsearchimplementation
+      id: demonstrateslinearsearchimplementation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Demonstrates linear search implementation"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_demonstrateslinearsearchimplementation.txt
+        timeout: 10
+        max-score: 20
+
+    - name: showstimingcomparisonbetweenalgorithms
+      id: showstimingcomparisonbetweenalgorithms
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Shows timing comparison between algorithms"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_showstimingcomparisonbetweenalgorithms.txt
+        timeout: 10
+        max-score: 15
+
+    - name: answerslabchallengeaboutmaximumsteps
+      id: answerslabchallengeaboutmaximumsteps
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Answers lab challenge about maximum steps"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_answerslabchallengeaboutmaximumsteps.txt
+        timeout: 10
+        max-score: 10
+
+    - name: calculatescorrectmaximumstepsusinglog2
+      id: calculatescorrectmaximumstepsusinglog2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Calculates correct maximum steps using log2"
+        command: |
+          (ulimit -c 0; python3 main.py) 2>/dev/null | node -e 'const fs=require("fs"),r=s=>s.replace(/[\s\r\n]+$/,"");const a=r(fs.readFileSync(0,"utf8")),e=r(process.argv[1]?fs.readFileSync(process.argv[1],"utf8"):process.argv[2]||"");process.exit(a.includes(e)?0:1);' /tmp/expected_calculatescorrectmaximumstepsusinglog2.txt
+        timeout: 10
+        max-score: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        PROGRAMEXECUTESWITHOUTERRORS_RESULTS: "${{ steps.programexecuteswithouterrors.outputs.result }}"
+        DEMONSTRATESBINARYSEARCHIMPLEMENTATION_RESULTS: "${{ steps.demonstratesbinarysearchimplementation.outputs.result }}"
+        DEMONSTRATESLINEARSEARCHIMPLEMENTATION_RESULTS: "${{ steps.demonstrateslinearsearchimplementation.outputs.result }}"
+        SHOWSTIMINGCOMPARISONBETWEENALGORITHMS_RESULTS: "${{ steps.showstimingcomparisonbetweenalgorithms.outputs.result }}"
+        ANSWERSLABCHALLENGEABOUTMAXIMUMSTEPS_RESULTS: "${{ steps.answerslabchallengeaboutmaximumsteps.outputs.result }}"
+        CALCULATESCORRECTMAXIMUMSTEPSUSINGLOG2_RESULTS: "${{ steps.calculatescorrectmaximumstepsusinglog2.outputs.result }}"
+      with:
+        runners: programexecuteswithouterrors,demonstratesbinarysearchimplementation,demonstrateslinearsearchimplementation,showstimingcomparisonbetweenalgorithms,answerslabchallengeaboutmaximumsteps,calculatescorrectmaximumstepsusinglog2

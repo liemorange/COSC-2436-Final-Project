@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "Test AVL Tree Insertion and Balancing",
+      "run": "python3 -c \"from avl_tree import AVLTree; tree = AVLTree(); values = [10, 20, 30, 40, 50, 25]; [tree.insert(v) for v in values]; assert tree.inorder() == [10, 20, 25, 30, 40, 50]; print('PASS')\"",
+      "points": 20,
+      "input": "",
+      "output": "PASS",
+      "setup": "",
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "name": "Test AVL Tree Left Rotation",
+      "run": "python3 -c \"from avl_tree import AVLTree; tree = AVLTree(); values = [10, 20, 30]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')\"",
+      "points": 20,
+      "input": "",
+      "output": "PASS",
+      "setup": "",
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "name": "Test AVL Tree Right Rotation",
+      "run": "python3 -c \"from avl_tree import AVLTree; tree = AVLTree(); values = [30, 20, 10]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')\"",
+      "points": 20,
+      "input": "",
+      "output": "PASS",
+      "setup": "",
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "name": "Test AVL Tree Left-Right Rotation",
+      "run": "python3 -c \"from avl_tree import AVLTree; tree = AVLTree(); values = [30, 10, 20]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')\"",
+      "points": 20,
+      "input": "",
+      "output": "PASS",
+      "setup": "",
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "name": "Test AVL Tree Right-Left Rotation",
+      "run": "python3 -c \"from avl_tree import AVLTree; tree = AVLTree(); values = [10, 30, 20]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')\"",
+      "points": 20,
+      "input": "",
+      "output": "PASS",
+      "setup": "",
+      "timeout": 10,
+      "comparison": "exact"
+    }
+  ]
+}

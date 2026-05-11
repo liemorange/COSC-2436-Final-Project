@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "run": "python3 -c \"import py_compile; py_compile.compile('main.py', doraise=True)\"",
+      "name": "Compilation and Syntax Check",
+      "input": "",
+      "setup": "",
+      "output": "",
+      "points": 10,
+      "timeout": 10,
+      "comparison": "exact"
+    },
+    {
+      "run": "python3 main.py",
+      "name": "Functional Test",
+      "input": "",
+      "setup": "python3 -c \"from graph import Graph, create_texas_road_network; from bfs import bfs_find_path, bfs_all_reachable; graph = create_texas_road_network()\"",
+      "output": "============================================================\nPART 1: TEXAS ROAD NETWORK GRAPH\n============================================================\n\nCreated graph with 18 cities\n\nGraph Adjacency List:\n----------------------------------------\nArlington: ['Dallas', 'Fort Worth']\nAustin: ['Dallas', 'San Antonio', 'Killeen']\nBrownsville: ['Corpus Christi', 'McAllen']\nCorpus Christi: ['Houston', 'San Antonio', 'Brownsville']\nDallas: ['Houston', 'Austin', 'Fort Worth', 'Arlington', 'Plano', 'Irving', 'Garland']\nEl Paso: ['San Antonio', 'Lubbock']\nFort Worth: ['Dallas', 'Lubbock', 'Arlington']\nFrisco: ['Plano']\nGarland: ['Dallas']\nHouston: ['Dallas', 'San Antonio', 'Corpus Christi']\nIrving: ['Dallas']\nKilleen: ['Austin']\nLaredo: ['San Antonio', 'McAllen']\nLubbock: ['Fort Worth', 'El Paso']\nMcAllen: ['Brownsville', 'Laredo']\nMcKinney: ['Plano']\nPlano: ['Dallas', 'Frisco', 'McKinney']\nSan Antonio: ['Austin', 'Laredo', 'Houston', 'El Paso', 'Corpus Christi']\n\n============================================================\nPART 2: SHORTEST PATH (BFS)\n============================================================\n\nBFS from 'Houston' to 'El Paso':\n----------------------------------------\nLevel 0: Visiting 'Houston'\nLevel 1: Visiting 'Dallas'\nLevel 1: Visiting 'San Antonio'\nLevel 1: Visiting 'Corpus Christi'\nLevel 2: Visiting 'Austin'\nLevel 2: Visiting 'Fort Worth'\nLevel 2: Visiting 'Arlington'\nLevel 2: Visiting 'Plano'\nLevel 2: Visiting 'Irving'\nLevel 2: Visiting 'Garland'\nLevel 2: Visiting 'Laredo'\nLevel 2: Visiting 'El Paso'\n\nFound path with 2 edges!\n\nRoute: Houston \u2192 San Antonio \u2192 El Paso\n\n----------------------------------------\n\nBFS from 'Houston' to 'McKinney':\n----------------------------------------\nLevel 0: Visiting 'Houston'\nLevel 1: Visiting 'Dallas'\nLevel 1: Visiting 'San Antonio'\nLevel 1: Visiting 'Corpus Christi'\nLevel 2: Visiting 'Austin'\nLevel 2: Visiting 'Fort Worth'\nLevel 2: Visiting 'Arlington'\nLevel 2: Visiting 'Plano'\nLevel 2: Visiting 'Irving'\nLevel 2: Visiting 'Garland'\nLevel 2: Visiting 'Laredo'\nLevel 2: Visiting 'El Paso'\nLevel 2: Visiting 'Brownsville'\nLevel 3: Visiting 'Killeen'\nLevel 3: Visiting 'Lubbock'\nLevel 3: Visiting 'Frisco'\nLevel 3: Visiting 'McKinney'\n\nFound path with 3 edges!\n\nRoute: Houston \u2192 Dallas \u2192 Plano \u2192 McKinney\n\n============================================================\nPART 3: DISTANCES FROM HOUSTON\n============================================================\n\nCities by distance (edges) from Houston:\n  0 edge(s): Houston\n  1 edge(s): Corpus Christi, Dallas, San Antonio\n  2 edge(s): Arlington, Austin, Brownsville, El Paso, Fort Worth, Garland, Irving, Laredo, Plano\n  3 edge(s): Frisco, Killeen, Lubbock, McAllen, McKinney\n\n============================================================\nPART 4: BFS KEY CONCEPTS\n============================================================\n\n    Why BFS finds shortest path:\n    1. Explores ALL nodes at distance 1 first\n    2. Then ALL nodes at distance 2\n    3. And so on...\n    \n    First time we reach destination = shortest path!\n    \n    BFS uses a QUEUE (FIFO):\n    - First In, First Out\n    - Process nodes in order they were discovered\n    \n    Time Complexity: O(V + E)\n    - Visit each vertex once: O(V)\n    - Check each edge once: O(E)\n    \n    Note: BFS finds shortest path by NUMBER OF EDGES.\n    For weighted graphs (actual distances), use Dijkstra's (Lab 9)!",
+      "points": 90,
+      "timeout": 10,
+      "comparison": "exact"
+    }
+  ]
+}

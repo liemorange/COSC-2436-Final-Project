@@ -1,0 +1,77 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main, solution ]
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: testavltreeinsertionandbalancing
+      id: testavltreeinsertionandbalancing
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test AVL Tree Insertion and Balancing"
+        command: python3 -c "from avl_tree import AVLTree; tree = AVLTree(); values = [10, 20, 30, 40, 50, 25]; [tree.insert(v) for v in values]; assert tree.inorder() == [10, 20, 25, 30, 40, 50]; print('PASS')"
+        timeout: 10
+        max-score: 20
+
+    - name: testavltreeleftrotation
+      id: testavltreeleftrotation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test AVL Tree Left Rotation"
+        command: python3 -c "from avl_tree import AVLTree; tree = AVLTree(); values = [10, 20, 30]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')"
+        timeout: 10
+        max-score: 20
+
+    - name: testavltreerightrotation
+      id: testavltreerightrotation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test AVL Tree Right Rotation"
+        command: python3 -c "from avl_tree import AVLTree; tree = AVLTree(); values = [30, 20, 10]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')"
+        timeout: 10
+        max-score: 20
+
+    - name: testavltreeleftrightrotation
+      id: testavltreeleftrightrotation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test AVL Tree Left-Right Rotation"
+        command: python3 -c "from avl_tree import AVLTree; tree = AVLTree(); values = [30, 10, 20]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')"
+        timeout: 10
+        max-score: 20
+
+    - name: testavltreerightleftrotation
+      id: testavltreerightleftrotation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Test AVL Tree Right-Left Rotation"
+        command: python3 -c "from avl_tree import AVLTree; tree = AVLTree(); values = [10, 30, 20]; [tree.insert(v) for v in values]; assert tree.root.value == 20; print('PASS')"
+        timeout: 10
+        max-score: 20
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TESTAVLTREEINSERTIONANDBALANCING_RESULTS: "${{ steps.testavltreeinsertionandbalancing.outputs.result }}"
+        TESTAVLTREELEFTROTATION_RESULTS: "${{ steps.testavltreeleftrotation.outputs.result }}"
+        TESTAVLTREERIGHTROTATION_RESULTS: "${{ steps.testavltreerightrotation.outputs.result }}"
+        TESTAVLTREELEFTRIGHTROTATION_RESULTS: "${{ steps.testavltreeleftrightrotation.outputs.result }}"
+        TESTAVLTREERIGHTLEFTROTATION_RESULTS: "${{ steps.testavltreerightleftrotation.outputs.result }}"
+      with:
+        runners: testavltreeinsertionandbalancing,testavltreeleftrotation,testavltreerightrotation,testavltreeleftrightrotation,testavltreerightleftrotation

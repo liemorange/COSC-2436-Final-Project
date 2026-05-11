@@ -1,0 +1,52 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python 3.13
+      run: |
+        python3 --version
+        pip install --upgrade pip
+        pip install pandas numpy scikit-learn matplotlib
+
+    - name: compilationandsyntaxcheck
+      id: compilationandsyntaxcheck
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Compilation and Syntax Check"
+        command: python3 -c "import py_compile; py_compile.compile('main.py', doraise=True)"
+        timeout: 10
+        max-score: 10
+
+    - name: functionaltest
+      id: functionaltest
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "Functional Test"
+        setup-command: python3 -c "from graph import Graph, create_texas_road_network; from bfs import bfs_find_path, bfs_all_reachable; graph = create_texas_road_network()"
+        command: python3 main.py
+        timeout: 10
+        max-score: 90
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        COMPILATIONANDSYNTAXCHECK_RESULTS: "${{steps.compilationandsyntaxcheck.outputs.result}}"
+        FUNCTIONALTEST_RESULTS: "${{steps.functionaltest.outputs.result}}"
+      with:
+        runners: compilationandsyntaxcheck,functionaltest
