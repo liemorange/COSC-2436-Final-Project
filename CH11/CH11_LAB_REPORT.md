@@ -3,6 +3,7 @@
 ## Student Information
 - **Name:** Donghyun Lee
 - **Date:** 05/10/26
+- **Course:** COSC 2436
 
 ## Algorithm Summary
 - **How it works:** DP breaks a big problem into smaller subproblems, solves each one once, and saves the answer so you don't redo the same work. There are two ways to do it — top-down which is just recursion with caching, and bottom-up which builds up a table starting from the smallest cases.

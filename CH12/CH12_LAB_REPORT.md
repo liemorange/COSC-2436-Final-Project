@@ -3,13 +3,13 @@
 ## Student Information
 - **Name:** Donghyun Lee
 - **Date:** 05/10/2026
-
+- **Course:** COSC 2436
 ## Algorithm Summary
-Linear regression fits a straight line through your data to predict a continuous output. The line is just y = mx + b and you're trying to find the m and b that make the predictions as close to the actual values as possible. That's done by minimizing the MSE — basically how wrong your predictions are on average. You can solve it directly with the normal equation or find it iteratively with gradient descent. 
+- **How it works:** Linear regression fits a straight line through your data to predict a continuous output. You are trying to find the the predictions as close to the actual values as possible. That's done by minimizing predictions. You can solve by finding it iteratively with gradient descent. 
 
-Time: Normal equation is O(n·d²) because of the matrix inversion. Gradient descent is O(n·d) per iteration so it depends on how many iterations you run, but it handles large datasets better.
+- **Time complexity:** Normal equation is O(n·d^2) because of the matrix inversion. Gradient descent is O(n·d) per iteration.
 
-When to use it: When your data has a roughly linear relationship — house prices, sales forecasting, temperature prediction. Also commonly used as a starting baseline before trying anything fancier.
+- **When to use it:** When your data has a roughly linear relationship like forecasting, temperature prediction,etc. Also commonly used as a starting baseline before trying anything fancier.
 
 ## Test Results
 

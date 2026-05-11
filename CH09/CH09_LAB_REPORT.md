@@ -3,10 +3,11 @@
 ## Student Information
 - **Name:** Donghyun Lee
 - **Date:** 05/10/2026
+- **Course:** COSC 2436
 
 ## Algorithm Summary
 - **How it works:** You start at the source with cost 0, everything else is infinity and each step you pick the cheapest unvisited item, check if going through it gives any neighbors a better price, and update if so. Keep doing that until you reach the destination.
-- **Time complexity:** O((V + E) log V) for min-heap and O(V²) array based approach.
+- **Time complexity:** O((V+E) log V) for min-heap and O(V²) array based approach.
 - **When to use it:** Dijkstra's algorithm is used when you need the shortest path in a weighted graph and none of the weights are negative like GPS.
 
 ## Test Results

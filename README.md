@@ -1,13 +1,14 @@
 # COSC-2436 6001 1 Programming Fundamentals - Final Project
 
-The Final Project is a portfolio repository that gathers all 12 chapter labs you have completed this semester (Chapters 1–12) into a single, well-organized GitHub repository. Each chapter covered a different data-structure or algorithm topic — binary search, sorting, recursion, hash tables, graphs, trees, Dijkstra's algorithm, greedy methods, dynamic programming, and regression.
+A semester-long collection of 12 chapter labs covering data structures and
+algorithms in Python. Each chapter folder contains the working program files
+plus a written lab report.
 
 ## Author
-- **Name:** Donghyun Lee
-- **Date:** 5/10/2026
+- **Name:** Donghyun Lee - COSC 2436, Spring 2026
 
 ## Description
-All my lab chapter works from COSC 2436 in one place sorting, searching, graphs, dynamic programming, etc.
+All my lab chapter works done in Studysite.ai with Github connectoin, as an assignment from COSC 2436 class copmosed in one place as the final project. The chapter covered include various sortings, searchings, graphs, dynamic programming, tables, etc.
 
 ## Repository Structure
 
@@ -26,20 +27,21 @@ All my lab chapter works from COSC 2436 in one place sorting, searching, graphs,
 | CH11   | Dynamic Programming                                   |
 | CH12   | Regression (intro to machine learning)                |
 
-Each folder contains the program files from that lab plus a `CHxx_LAB_REPORT.md` documenting the implementation, test results, and reflections.
+Each folder contains the program files from that lab plus a `CHxx_LAB_REPORT.md`
+documenting the implementation, test results, and reflections.
 
 ## How to Run a Lab
-In the chapter folder of the topic, run the main file:
+Each lab is a standalone Python program. Navigate into the chapter folder
+and run the main file:
 
-```bash
-cd [CH0X]
-python3 main.py
-```
+    cd CH01
+    python3 main.py
 
 ## Requirements
-- Python
-- Github
+- Python 3.10 or newer
+- Some labs require additional packages listed in their `requirements.txt`.
+  Install with `pip install -r requirements.txt` from inside that chapter's folder.
 
 ## Course
 COSC 2436 - Programming Fundamentals III (Data Structures and Algorithms),
-Spring 2026, based on Grokking Algorithms 2nd edition
+[Semester Year], based on *Grokking Algorithms* by Aditya Bhargava.
